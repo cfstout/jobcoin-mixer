@@ -9,12 +9,18 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import io.github.cfstout.jobcoin.models.HelloWorldResponse;
 
 @Path("/hello-world")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloWorldResource {
   private static final Logger LOG = LoggerFactory.getLogger(HelloWorldResource.class);
+
+  @Inject
+  public HelloWorldResource() {
+  }
 
   @GET
   public Response helloWorld() {

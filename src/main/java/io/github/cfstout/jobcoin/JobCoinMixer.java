@@ -1,10 +1,11 @@
 package io.github.cfstout.jobcoin;
 
-import io.github.cfstout.jobcoin.config.JobCoinMixerConfiguration;
-
 import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.github.cfstout.jobcoin.resources.HelloWorldResource;
+import io.github.cfstout.jobcoin.config.JobCoinMixerConfiguration;
+import io.github.cfstout.jobcoin.config.JobCoinMixerModule;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 public class JobCoinMixer extends Application<JobCoinMixerConfiguration> {
 
@@ -13,7 +14,16 @@ public class JobCoinMixer extends Application<JobCoinMixerConfiguration> {
   }
 
   @Override
+  public void initialize(Bootstrap<JobCoinMixerConfiguration> bootstrap) {
+    GuiceBundle guiceBundle = GuiceBundle.builder()
+        .modules(new JobCoinMixerModule())
+        .enableAutoConfig("io.github.cfstout.jobcoin")
+        .build();
+
+    bootstrap.addBundle(guiceBundle);
+  }
+
+  @Override
   public void run(JobCoinMixerConfiguration configuration, Environment environment) throws Exception {
-    environment.jersey().register(new HelloWorldResource());
   }
 }
