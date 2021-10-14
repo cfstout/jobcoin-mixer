@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
+import io.github.cfstout.jobcoin.annotations.HouseAccount;
 import io.github.cfstout.jobcoin.annotations.JobCoinUrl;
 import io.github.cfstout.jobcoin.helpers.ObjectMapperProvider;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
@@ -36,5 +37,12 @@ public class JobCoinMixerModule extends DropwizardAwareModule<JobCoinMixerConfig
   @JobCoinUrl
   public String jobCoinUrl() {
     return configuration().getJobCoinUrl();
+  }
+
+  @Provides
+  @Singleton
+  @HouseAccount
+  public String houseAccount() {
+    return configuration().getHouseAccount();
   }
 }

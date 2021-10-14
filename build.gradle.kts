@@ -21,6 +21,7 @@ dependencies {
     implementation("org.asynchttpclient","async-http-client","2.12.3")
     implementation("ru.vyarus", "dropwizard-guicey", "5.3.0")
 
+    testImplementation("org.assertj", "assertj-core", "3.21.0")
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.1")
 }
 

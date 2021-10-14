@@ -1,4 +1,5 @@
 jobCoinUrl: http://jobcoin.gemini.com/amazingly-yearning/api/
+houseAccount: job-coin-mixer-house-account
 
 logging:
   level: INFO
