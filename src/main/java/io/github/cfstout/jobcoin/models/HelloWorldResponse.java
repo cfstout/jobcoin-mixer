@@ -2,6 +2,8 @@ package io.github.cfstout.jobcoin.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.github.cfstout.jobcoin.clients.JobCoinClient;
+
 public class HelloWorldResponse {
   private final String greeting;
 
