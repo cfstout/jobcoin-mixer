@@ -13,15 +13,29 @@ tasks {
     }
 }
 
+val deps by extra {
+    mapOf(
+        "asynchttp" to "2.12.3",
+        "assertj" to "3.21.0",
+        "dropwizard" to "2.0.25",
+        "guicey" to "5.3.0",
+        "junit" to "5.8.1",
+        "lombok" to "1.18.22",
+        "mockito" to "4.0.0"
+    )
+}
+
 dependencies {
-    annotationProcessor( "org.projectlombok", "lombok", "1.18.22")
-    compileOnly("org.projectlombok", "lombok", "1.18.22")
+    annotationProcessor("org.projectlombok", "lombok", deps["lombok"])
+    compileOnly("org.projectlombok", "lombok", deps["lombok"])
 
-    implementation("io.dropwizard", "dropwizard-core","2.0.25")
-    implementation("org.asynchttpclient","async-http-client","2.12.3")
-    implementation("ru.vyarus", "dropwizard-guicey", "5.3.0")
+    implementation("io.dropwizard", "dropwizard-core", deps["dropwizard"])
+    implementation("org.asynchttpclient", "async-http-client", deps["asynchttp"])
+    implementation("ru.vyarus", "dropwizard-guicey", deps["guicey"])
 
-    testImplementation("org.assertj", "assertj-core", "3.21.0")
-    testImplementation("org.junit.jupiter", "junit-jupiter", "5.8.1")
+    testImplementation("org.assertj", "assertj-core", deps["assertj"])
+    testImplementation("org.junit.jupiter", "junit-jupiter", deps["junit"])
+    testImplementation("org.junit.jupiter", "junit-jupiter-params", deps["junit"])
+    implementation("org.mockito", "mockito-core", deps["mockito"])
 }
 

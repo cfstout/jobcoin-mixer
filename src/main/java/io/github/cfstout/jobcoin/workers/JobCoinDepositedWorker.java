@@ -93,7 +93,8 @@ public class JobCoinDepositedWorker implements Runnable, AutoCloseable {
 
   }
 
-  private boolean shouldProcess(MixerAddressTrackerEntry mixerAddressTrackerEntry,
+  @VisibleForTesting
+  boolean shouldProcess(MixerAddressTrackerEntry mixerAddressTrackerEntry,
                                 AddressInfoResponse addressInfoResponse) {
     Instant mostRecentDeposit = getMostRecentDeposit(addressInfoResponse.getTransactions(), mixerAddressTrackerEntry.getDepositAddress());
     return mostRecentDeposit.isAfter(mixerAddressTrackerEntry.getLastTransactionProcessed())
