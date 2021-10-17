@@ -41,10 +41,14 @@ public class JobCoinClient {
   }
 
   public CompletableFuture<Boolean> sendTransaction(String fromAddress, String toAddress, double amount) {
+    return sendTransaction(new TransactionRequest(fromAddress, toAddress, amount));
+  }
+
+  public CompletableFuture<Boolean> sendTransaction(TransactionRequest transactionRequest) {
     try {
       return asyncHttpClient.preparePost(baseUrl + "transactions")
           .addHeader("Content-Type", "application/json")
-          .setBody(objectMapper.writeValueAsBytes(new TransactionRequest(fromAddress, toAddress, amount)))
+          .setBody(objectMapper.writeValueAsBytes(transactionRequest))
           .execute()
           .toCompletableFuture()
           .thenApply(response -> response.getStatusCode() >= 200 && response.getStatusCode() < 300);

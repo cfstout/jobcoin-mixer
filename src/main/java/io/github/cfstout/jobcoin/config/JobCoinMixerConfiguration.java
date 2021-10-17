@@ -12,11 +12,17 @@ import lombok.EqualsAndHashCode;
 public class JobCoinMixerConfiguration extends Configuration {
   private final String jobCoinUrl;
   private final String houseAccount;
+  private final double mixerTransactionFeePercent;
+  private final int mixerPayoutIncrement;
 
   @JsonCreator
   public JobCoinMixerConfiguration(@JsonProperty("jobCoinUrl") String jobCoinUrl,
-                                   @JsonProperty("houseAccount") String houseAccount) {
+                                   @JsonProperty("houseAccount") String houseAccount,
+                                   @JsonProperty("mixerTransactionFeePercent") double mixerTransactionFeePercent,
+                                   @JsonProperty("mixerPayoutIncrement") int mixerPayoutIncrement) {
     this.jobCoinUrl = jobCoinUrl;
     this.houseAccount = houseAccount;
+    this.mixerTransactionFeePercent = mixerTransactionFeePercent;
+    this.mixerPayoutIncrement = mixerPayoutIncrement;
   }
 }

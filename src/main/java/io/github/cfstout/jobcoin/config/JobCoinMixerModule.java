@@ -12,6 +12,8 @@ import com.google.inject.Singleton;
 
 import io.github.cfstout.jobcoin.annotations.HouseAccount;
 import io.github.cfstout.jobcoin.annotations.JobCoinUrl;
+import io.github.cfstout.jobcoin.annotations.MixerPayoutIncrement;
+import io.github.cfstout.jobcoin.annotations.TransactionFeePercent;
 import io.github.cfstout.jobcoin.helpers.ObjectMapperProvider;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 
@@ -44,5 +46,19 @@ public class JobCoinMixerModule extends DropwizardAwareModule<JobCoinMixerConfig
   @HouseAccount
   public String houseAccount() {
     return configuration().getHouseAccount();
+  }
+
+  @Provides
+  @Singleton
+  @TransactionFeePercent
+  public double transactionFeePercent() {
+    return configuration().getMixerTransactionFeePercent();
+  }
+
+  @Provides
+  @Singleton
+  @MixerPayoutIncrement
+  public int mixerPayoutIncrement() {
+    return configuration().getMixerPayoutIncrement();
   }
 }

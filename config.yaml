@@ -1,5 +1,7 @@
 jobCoinUrl: http://jobcoin.gemini.com/amazingly-yearning/api/
 houseAccount: job-coin-mixer-house-account
+mixerTransactionFeePercent: 1.0
+mixerPayoutIncrement: 10
 
 logging:
   level: INFO
