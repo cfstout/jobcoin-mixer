@@ -4,11 +4,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -91,8 +89,13 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
     // Checked in our filter in the run statement above
     String mixerDepositAddress = transactionToProcess.getFromAddress().get();
     Optional<MixerAddressTrackerEntry> maybeEntry = mixerAddressTracker.getEntryForAddress(mixerDepositAddress);
+    Instant sourceTimestamp = transactionToProcess.getTimestamp().toInstant();
     if (maybeEntry.isEmpty() || maybeEntry.get().getReturnAddresses().isEmpty()) {
-      mixerPayoutTracker.logError(mixerDepositAddress, transactionToProcess.getAmountAsDouble());
+      mixerPayoutTracker.logError(
+          mixerDepositAddress,
+          transactionToProcess.getAmountAsDouble(),
+          sourceTimestamp,
+          new IllegalStateException("No mixer addresses configured"));
       return CompletableFuture.completedFuture(null);
     }
     MixerAddressTrackerEntry mixerAddressTrackerEntry = maybeEntry.get();
@@ -112,17 +115,20 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
       transactionFutures.add(
           jobCoinClient.sendTransaction(request).thenApplyAsync(success -> {
             if (success) {
-              // Need to double check, but this _should_ reference the correct value for each loop iteration
+              // Need to double-check, but this should reference the correct value for each loop iteration
               mixerPayoutTracker.logTransaction(
                   request.getFromAddress(),
                   request.getToAddress(),
-                  request.getAmountAsDouble()
+                  request.getAmountAsDouble(),
+                  sourceTimestamp
               );
             } else {
               mixerPayoutTracker.logError(
                   request.getFromAddress(),
                   Optional.of(request.getToAddress()),
-                  request.getAmountAsDouble()
+                  request.getAmountAsDouble(),
+                  sourceTimestamp,
+                  new RuntimeException("Transaction failed")
               );
             }
             return success;
@@ -135,7 +141,7 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     workPool.shutdown();
   }
 }
