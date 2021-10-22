@@ -23,3 +23,8 @@ time T+1. In real life this might not always be the case, but with a block chain
 actual times for block numbers to get the same behavior. 
 
 ## Next Steps
+### Prepare for production
+* Add a database for persistence
+* Ensure consistency in a distributed environment
+### Other improvements
+* Round-robin payouts so first address in the list doesn't get the most deposits

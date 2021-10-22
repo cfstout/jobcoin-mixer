@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -63,8 +64,8 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
     this.mixerPayoutIncrement = mixerPayoutIncrement;
   }
 
-  // Only allow one thread to run this method at a time
   // todo I think we could add a concurrent deque that we add to in this method and then have another background thread pull work off that queue to do the actual transactions
+  // Only allow one thread to run this method at a time
   @Override
   public synchronized void run() {
     CompletableFuture<AddressInfoResponse> addressInfoFuture = jobCoinClient.getAddressInfo(houseAccount);
@@ -85,7 +86,8 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
     }
   }
 
-  private CompletableFuture<Void> payoutViaMixer(Transaction transactionToProcess) {
+  @VisibleForTesting
+  CompletableFuture<Void> payoutViaMixer(Transaction transactionToProcess) {
     // Checked in our filter in the run statement above
     String mixerDepositAddress = transactionToProcess.getFromAddress().get();
     Optional<MixerAddressTrackerEntry> maybeEntry = mixerAddressTracker.getEntryForAddress(mixerDepositAddress);
