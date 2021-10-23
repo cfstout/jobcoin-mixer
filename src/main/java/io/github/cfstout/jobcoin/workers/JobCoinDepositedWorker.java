@@ -111,6 +111,7 @@ public class JobCoinDepositedWorker implements Runnable, AutoCloseable {
         .mapToDouble(Transaction::getAmountAsDouble)
         .sum();
     if (totalNewDeposits > 0) {
+      LOG.info("Sending {} from deposit addresses to the house account '{}'", totalNewDeposits, houseAccount);
       return jobCoinClient.sendTransaction(mixerAddressTrackerEntry.getDepositAddress(), houseAccount, totalNewDeposits)
           .thenApplyAsync(b -> {
             if (b) {

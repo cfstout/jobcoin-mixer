@@ -31,7 +31,6 @@ public class MixerAddressResource {
   @POST
   @Path("/set-up")
   public Response setUpDepositAddress(SetUpDepositRequest request) {
-    LOG.info("Saying hello");
     if (request.getReturnAddresses().isEmpty()) {
       return Response
           .status(Status.BAD_REQUEST.getStatusCode(), "Must provide at least one return address")

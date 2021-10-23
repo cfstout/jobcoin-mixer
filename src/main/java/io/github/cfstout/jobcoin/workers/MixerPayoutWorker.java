@@ -102,6 +102,7 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
       return CompletableFuture.completedFuture(null);
     }
     MixerAddressTrackerEntry mixerAddressTrackerEntry = maybeEntry.get();
+    LOG.info("Paying out to configured payout addresses '{}' via the mixer", mixerAddressTrackerEntry.getReturnAddresses());
     double amountToDeposit = transactionToProcess.getAmountAsDouble() * (1 - mixerTransactionFeePercent / 100);
     int intermediateTransactionNumber = 0;
     int numberOfAddresses = mixerAddressTrackerEntry.getReturnAddresses().size();
