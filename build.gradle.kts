@@ -3,6 +3,11 @@ plugins {
     application
 }
 
+application {
+    mainClass.set("io.github.cfstout.jobcoin.JobCoinMixer")
+    applicationDefaultJvmArgs.let { existing -> existing + listOf("server", "config.yaml")}
+}
+
 repositories {
     mavenCentral()
 }
@@ -10,6 +15,12 @@ repositories {
 tasks {
     test {
         useJUnitPlatform()
+    }
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "io.github.cfstout.jobcoin.JobCoinMixer"
     }
 }
 

@@ -72,6 +72,7 @@ public class JobCoinDepositedWorker implements Runnable, AutoCloseable {
    */
   @Override
   public void run() {
+    LOG.info("Checking for new deposits to the mixer");
     CompletableFuture<Void> job = CompletableFuture.supplyAsync(mixerAddressTracker::getAllAddressesToWatch, workPool)
         .thenCompose(mixerAddressTrackerEntries -> {
           List<CompletableFuture<?>> updates = mixerAddressTrackerEntries.stream()

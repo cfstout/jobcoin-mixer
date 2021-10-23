@@ -9,7 +9,10 @@ moves the coin into the mixer house account
 * A JobCoinMixerWorker which watches for new deposits to our house account and doles those coins out to the configured return addresses
 
 ### Running
-There are two ways of running the service
+There are two ways of running the service:
+* There is a run configuration stored in `.idea/runConfigurations`. If you import the project into intellij, you should be
+ able to refer to this configuration to run the application.
+* You can also run via gradle: `./gradlew run --args "server config.yaml"`
 
 ### Annotation processing
 I decied to use lombok to avoid a lot of boiler-plate for the models used here. In order for this to work in IntelliJ,
@@ -28,3 +31,6 @@ actual times for block numbers to get the same behavior.
 * Ensure consistency in a distributed environment
 ### Other improvements
 * Round-robin payouts so first address in the list doesn't get the most deposits
+### CI/CD
+* Run tests on commit
+* Dockerize the app for running in a deployed environment

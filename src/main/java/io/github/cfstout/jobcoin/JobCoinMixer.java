@@ -25,6 +25,5 @@ public class JobCoinMixer extends Application<JobCoinMixerConfiguration> {
 
   @Override
   public void run(JobCoinMixerConfiguration configuration, Environment environment) throws Exception {
-    // todo set workers to run
   }
 }

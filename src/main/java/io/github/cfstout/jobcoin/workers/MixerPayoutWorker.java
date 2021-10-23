@@ -68,6 +68,7 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
   // Only allow one thread to run this method at a time
   @Override
   public synchronized void run() {
+    LOG.info("Setting up payouts for new deposits to the house account");
     CompletableFuture<AddressInfoResponse> addressInfoFuture = jobCoinClient.getAddressInfo(houseAccount);
     Instant latestTransactionProcessed = mixerPayoutTracker.getLatestTransactionProcessed();
     CompletableFuture<Void> job = addressInfoFuture.thenCompose(addressInfoResponse -> {
