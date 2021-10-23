@@ -14,12 +14,22 @@ import io.github.cfstout.jobcoin.annotations.HouseAccount;
 import io.github.cfstout.jobcoin.annotations.JobCoinUrl;
 import io.github.cfstout.jobcoin.annotations.MixerPayoutIncrement;
 import io.github.cfstout.jobcoin.annotations.TransactionFeePercent;
+import io.github.cfstout.jobcoin.clients.FakeWalletSetupProvider;
+import io.github.cfstout.jobcoin.clients.WalletSetupProvider;
+import io.github.cfstout.jobcoin.db.MixerAddressTracker;
+import io.github.cfstout.jobcoin.db.MixerAddressTrackerInMemory;
+import io.github.cfstout.jobcoin.db.MixerPayoutTracker;
+import io.github.cfstout.jobcoin.db.MixerPayoutTrackerInMemory;
 import io.github.cfstout.jobcoin.helpers.ObjectMapperProvider;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 
 public class JobCoinMixerModule extends DropwizardAwareModule<JobCoinMixerConfiguration> {
   @Override
   protected void configure() {
+    bind(MixerPayoutTracker.class).to(MixerPayoutTrackerInMemory.class);
+    bind(MixerAddressTracker.class).to(MixerAddressTrackerInMemory.class);
+    bind(WalletSetupProvider.class).to(FakeWalletSetupProvider.class);
+
   }
 
   @Provides
