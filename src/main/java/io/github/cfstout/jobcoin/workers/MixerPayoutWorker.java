@@ -144,6 +144,26 @@ public class MixerPayoutWorker implements Runnable, AutoCloseable {
     return CompletableFuture.allOf(transactionFutures.build().toArray(new CompletableFuture[]{}));
   }
 
+  @VisibleForTesting
+  List<TransactionRequest> distributeFunds(List<String> returnAddresses, double amount) {
+    Builder<TransactionRequest> requests = ImmutableList.builder();
+    // 95 to deposit
+    // 3 address
+    // 3 payments of 30 each + extra 5
+    double amtLeft = amount % mixerPayoutIncrement;
+    for (String address: returnAddresses) {
+      int numAvgPayouts = (int) (amount / mixerPayoutIncrement / returnAddresses.size());
+      TransactionRequest request = new TransactionRequest(
+          houseAccount,
+          address,
+          numAvgPayouts * mixerPayoutIncrement + (address.equals(returnAddresses.get(returnAddresses.size() - 1)) ? amtLeft : 0)
+      );
+      requests.add(request);
+    }
+
+    return requests.build();
+  }
+
   @Override
   public void close() {
     workPool.shutdown();

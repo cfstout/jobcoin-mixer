@@ -1,5 +1,6 @@
 package io.github.cfstout.jobcoin.workers;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 import java.time.ZonedDateTime;
@@ -149,5 +150,50 @@ public class MixerPayoutWorkerTest {
         new TransactionRequest(HOUSE_ACCOUNT, "return2", 9)
     );
     Assertions.assertThat(transactionRequestCaptor.getAllValues()).hasSameElementsAs(expectedSentTransactions);
+  }
+
+  private static Stream<Arguments> provideTestNewMixerPayoutArgs() {
+    return Stream.of(
+        Arguments.of(
+            List.of("return1", "return2"),
+            25,
+            List.of(
+                new TransactionRequest(HOUSE_ACCOUNT, "return1", 10),
+                new TransactionRequest(HOUSE_ACCOUNT, "return2", 15)
+            )
+        ),
+        Arguments.of(
+            List.of("return1", "return2"),
+            20,
+            List.of(
+                new TransactionRequest(HOUSE_ACCOUNT, "return1", 10),
+                new TransactionRequest(HOUSE_ACCOUNT, "return2", 10)
+            )
+        ),
+        Arguments.of(
+            List.of("return1", "return2"),
+            20.5,
+            List.of(
+                new TransactionRequest(HOUSE_ACCOUNT, "return1", 10),
+                new TransactionRequest(HOUSE_ACCOUNT, "return2", 10.5)
+            )
+        ),
+        Arguments.of(
+            List.of("return1", "return2"),
+            20.5000000000000000002,
+            List.of(
+                new TransactionRequest(HOUSE_ACCOUNT, "return1", 10),
+                new TransactionRequest(HOUSE_ACCOUNT, "return2", 10.5000000000000000002)
+            )
+        )
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideTestNewMixerPayoutArgs")
+  public void testNewMixerPayout(List<String> returnAddresses, double amount, List<TransactionRequest> expected) {
+    List<TransactionRequest> methodResult = unit.distributeFunds(returnAddresses, amount);
+
+    Assertions.assertThat(methodResult).hasSameElementsAs(expected);
   }
 }
